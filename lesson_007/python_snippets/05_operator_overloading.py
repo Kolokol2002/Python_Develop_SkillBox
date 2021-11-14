@@ -71,11 +71,16 @@ class Backpack:
         new_obj.content.extend(other.content)
         return new_obj
 
+    # def test(self):
+    #     new = Backpack()
+    #     print(new.content)
+    #     print(new.content.extend(self.content))
+
 
 my_backpack = Backpack(gift='бутерброд')
-son_backpack = Backpack(gift='банан')
+# son_backpack = Backpack(gift='банан')
 new_backpack = my_backpack + son_backpack
-print(new_backpack)
+print(new_backpack.content)
 
 # other_backpack = my_backpack + ['яблоко', 'апельсин', ]
 # print(other_backpack)

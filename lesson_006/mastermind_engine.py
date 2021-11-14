@@ -1,7 +1,6 @@
 from random import randint
 from termcolor import cprint, colored
 
-import verify as verify
 
 guess_number = None
 gameover = None
