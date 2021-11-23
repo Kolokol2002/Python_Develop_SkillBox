@@ -43,54 +43,136 @@ from random import randint
 
 
 class House:
+    dirt = 0
 
     def __init__(self):
-        pass
+        self.money = 100
+        self.food = 50
+
+    def __str__(self):
+        return f'В доме: денег - {self.money}, еды - {self.food}, грязи - {self.dirt}'
 
 
-class Husband:
+class Human(House):
 
     def __init__(self):
-        pass
+        super(Human, self).__init__()
+        self.fullness = 30
+        self.happy = 100
+
+
+    def __str__(self):
+        super(Human, self).__str__()
+        return f'У {self.__class__.__name__}, сытость - {self.fullness}, счастья - {self.happy}'
+
+
+class Husband(Human):
+
+    def __init__(self, name):
+        super().__init__()
+        self.name = f'{self.__class__.__name__} {name}'
+
 
     def __str__(self):
         return super().__str__()
 
     def act(self):
-        pass
+        House.dirt += 5
+
+        count = randint(1, 2)
+        if self.happy < 10:
+            cprint(f'{self.name} - умер от депресии(', color='red')
+            return
+        if self.fullness < 0:
+            cprint(f'{self.name} - умер от недостатка еды((', color='red')
+            return
+
+        if self.dirt > 90:
+            cprint(f'В доме 90 едениц грязи, счастья упало на - 10 пунктов', color='red')
+            self.happy -= 10
+        elif self.fullness <= 10:
+            self.eat()
+        elif self.happy <= 15:
+            self.gaming()
+        elif self.money <= 10:
+            self.work()
+        elif count == 1:
+            self.gaming()
+        elif count == 2:
+            self.work()
 
     def eat(self):
-        pass
+        count = randint(1, 30)
+        self.fullness += count
+        self.food -= count
+        cprint(f'{self.name} - поел {count} едениц еды', color='green')
 
     def work(self):
-        pass
+        self.money += 150
+        self.fullness -= 10
+        cprint(f'{self.name} - работал', color='cyan')
 
     def gaming(self):
-        pass
+        self.happy += 20
+        self.fullness -= 10
+        cprint(f'{self.name} - играл WoT', color='cyan')
 
 
-class Wife:
+class Wife(Human):
 
-    def __init__(self):
-        pass
+    def __init__(self, name):
+        super(Wife, self).__init__()
+        self.name = f'{self.__class__.__name__} {name}'
 
     def __str__(self):
         return super().__str__()
 
     def act(self):
-        pass
+        count = randint(1, 2)
+        if self.happy < 10:
+            cprint(f'{self.name} - умерла от депресии(', color='red')
+            return
+        if self.fullness < 0:
+            cprint(f'{self.name} - умерла от недостатка еды((', color='red')
+            return
+
+        if self.dirt > 90:
+            cprint(f'В доме 90 едениц грязи, счастья упало на - 10 пунктов', color='red')
+            self.happy -= 10
+        elif self.fullness <= 10:
+            self.eat()
+        elif self.food <= 10:
+            self.shopping()
+        elif self.happy <= 15:
+            self.buy_fur_coat()
+        elif self.dirt > 90:
+            self.clean_house()
+        elif count == 1:
+            self.clean_house()
+        elif count == 2:
+            cprint(f'{self.name} ничего не делала', color='green')
+
 
     def eat(self):
-        pass
+        count = randint(1, 30)
+        self.fullness += count
+        cprint(f'{self.name} - поела {count} едениц еды', color='green')
 
     def shopping(self):
-        pass
+        self.fullness -= 10
+        self.food += 10
+        self.money -= 10
+        cprint(f'{self.name} - купила еду', color='red')
 
     def buy_fur_coat(self):
-        pass
+        self.money -= 350
+        self.happy += 60
+        self.fullness -= 10
+        cprint(f'{self.name} - купила шубу и очень счаслива)', color='red')
 
     def clean_house(self):
-        pass
+        self.fullness -= 10
+        cprint(f'{self.name} - убралась в доме', color='red')
 
 
 home = House()
@@ -132,22 +214,22 @@ for day in range(365):
 # Если кот дерет обои, то грязи становится больше на 5 пунктов
 
 
-class Cat:
-
-    def __init__(self):
-        pass
-
-    def act(self):
-        pass
-
-    def eat(self):
-        pass
-
-    def sleep(self):
-        pass
-
-    def soil(self):
-        pass
+# class Cat:
+#
+#     def __init__(self):
+#         pass
+#
+#     def act(self):
+#         pass
+#
+#     def eat(self):
+#         pass
+#
+#     def sleep(self):
+#         pass
+#
+#     def soil(self):
+#         pass
 
 
 ######################################################## Часть вторая бис
@@ -161,22 +243,22 @@ class Cat:
 # отличия от взрослых - кушает максимум 10 единиц еды,
 # степень счастья  - не меняется, всегда ==100 ;)
 
-class Child:
-
-    def __init__(self):
-        pass
-
-    def __str__(self):
-        return super().__str__()
-
-    def act(self):
-        pass
-
-    def eat(self):
-        pass
-
-    def sleep(self):
-        pass
+# class Child:
+#
+#     def __init__(self):
+#         pass
+#
+#     def __str__(self):
+#         return super().__str__()
+#
+#     def act(self):
+#         pass
+#
+#     def eat(self):
+#         pass
+#
+#     def sleep(self):
+#         pass
 
 
 # TODO после реализации второй части - отдать на проверку учителем две ветки
@@ -189,22 +271,22 @@ class Child:
 # отправить на проверку учителем.
 
 
-home = House()
-serge = Husband(name='Сережа')
-masha = Wife(name='Маша')
-kolya = Child(name='Коля')
-murzik = Cat(name='Мурзик')
-
-for day in range(365):
-    cprint('================== День {} =================='.format(day), color='red')
-    serge.act()
-    masha.act()
-    kolya.act()
-    murzik.act()
-    cprint(serge, color='cyan')
-    cprint(masha, color='cyan')
-    cprint(kolya, color='cyan')
-    cprint(murzik, color='cyan')
+# home = House()
+# serge = Husband(name='Сережа')
+# masha = Wife(name='Маша')
+# kolya = Child(name='Коля')
+# murzik = Cat(name='Мурзик')
+#
+# for day in range(365):
+#     cprint('================== День {} =================='.format(day), color='red')
+#     serge.act()
+#     masha.act()
+#     kolya.act()
+#     murzik.act()
+#     cprint(serge, color='cyan')
+#     cprint(masha, color='cyan')
+#     cprint(kolya, color='cyan')
+#     cprint(murzik, color='cyan')
 
 
 # Усложненное задание (делать по желанию)

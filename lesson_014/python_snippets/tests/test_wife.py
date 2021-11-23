@@ -12,9 +12,9 @@ class WifeTest(unittest.TestCase):
 
     def test_act_with_shopping(self):
         self.sweet_home.food = 0
-        self.anna.fullness = 30
+        self.anna.fullness_cat = 30
         self.anna.act()
-        self.assertEqual(self.anna.fullness, 20)
+        self.assertEqual(self.anna.fullness_cat, 20)
         self.assertEqual(self.sweet_home.food, 100)
 
     def test_act_with_buy_fur_coat(self):
@@ -23,7 +23,7 @@ class WifeTest(unittest.TestCase):
         self.sweet_home.money = 1000
         self.anna.happiness = 10
         self.anna.act()
-        self.assertEqual(self.anna.fullness, 20)
+        self.assertEqual(self.anna.fullness_cat, 20)
         self.assertEqual(self.anna.happiness, 70)
         self.assertEqual(self.sweet_home.money, 650)
 
