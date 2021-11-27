@@ -52,15 +52,18 @@ class House:
         self.money = 100
         self.food = 50
         self.dirt = 0
+        self.food_cat = 30
 
     def __str__(self):
         self.count += 1
         if self.count == 365:
-            return f'В доме: денег - {self.money}, еды - {self.food}, грязи - {self.dirt}\n\n'\
+            return f'В доме: денег - {self.money}, еды - {self.food}, ' \
+                   f'еды для кота - {self.food_cat} грязи - {self.dirt}\n\n'\
                    f'За год: заработано денег - {self.count_money}, ' \
                    f'сьедено еды - {self.count_food}, куплено шуб - {self.count_coat}'
         else:
-            return f'В доме: денег - {self.money}, еды - {self.food}, грязи - {self.dirt}'
+            return f'В доме: денег - {self.money}, еды - {self.food}, ' \
+                   f'еды для кота - {self.food_cat} грязи - {self.dirt}'
 
 
 class Family:
@@ -72,7 +75,10 @@ class Family:
         self.house = None
 
     def __str__(self):
-        return f'У {self.__class__.__name__}, сытость - {self.fullness}, счастья - {self.happy}'
+        if self.__class__ is Cat:
+            return f'У {self.name}, сытость - {self.fullness}'
+        else:
+          return f'У {self.name}, сытость - {self.fullness}, счастья - {self.happy}'
 
     def in_house(self, house):
         self.house = house
@@ -94,10 +100,10 @@ class Husband(Family):
 
         count = randint(1, 2)
 
-        if self.happy < 10:
+        if self.happy <= 10:
             cprint(f'{self.name} - умер от депресии(', color='red')
             return
-        if self.fullness < 0:
+        if self.fullness <= 0:
             cprint(f'{self.name} - умер от недостатка еды((', color='red')
             return
 
@@ -111,7 +117,7 @@ class Husband(Family):
         elif self.happy <= 20:
             self.gaming()
         elif count == 1:
-            self.gaming()
+            self.iron_cat()
         elif count == 2:
             self.work()
 
@@ -133,6 +139,10 @@ class Husband(Family):
         self.fullness -= 10
         cprint(f'{self.name} - играл WoT', color='yellow')
 
+    def iron_cat(self):
+        self.happy += 10
+        cprint(f'{self.name} - гладил кота', color='magenta')
+
 
 class Wife(Family):
 
@@ -149,10 +159,10 @@ class Wife(Family):
 
         count = randint(1, 2)
 
-        if self.happy < 10:
+        if self.happy <= 10:
             cprint(f'{self.name} - умерла от депресии(', color='red')
             return
-        if self.fullness < 0:
+        if self.fullness <= 0:
             cprint(f'{self.name} - умерла от недостатка еды((', color='red')
             return
 
@@ -160,14 +170,17 @@ class Wife(Family):
             cprint(f'У {self.name} - счастья упало на 10, много грязи', color='red')
             self.happy -= 10
             self.clean_house()
-        elif self.fullness <= 20:
+
+        elif self.fullness <= 30:
             self.eat()
-        elif self.house.food <= 60:
+        elif self.house.food <= 15:
             self.shopping()
+        elif self.house.food_cat <= 10:
+            self.shopping_cat()
         elif self.happy <= 20:
             self.buy_fur_coat()
         elif count == 1:
-            self.eat()
+            self.iron_cat()
         elif count == 2:
             cprint(f'{self.name} ничего не делала', color='yellow')
 
@@ -180,9 +193,15 @@ class Wife(Family):
 
     def shopping(self):
         self.fullness -= 10
-        self.house.food += 30
-        self.house.money -= 30
+        self.house.food += 60
+        self.house.money -= 60
         cprint(f'{self.name} - купила еду', color='blue')
+
+    def shopping_cat(self):
+        self.fullness -= 10
+        self.house.food_cat += 30
+        self.house.money -= 30
+        cprint(f'{self.name} - купила еду для кота', color='blue')
 
     def buy_fur_coat(self):
         self.house.money -= 350
@@ -199,14 +218,66 @@ class Wife(Family):
             self.house.dirt -= self.house.dirt
         cprint(f'{self.name} - убралась в доме', color='red')
 
+    def iron_cat(self):
+        self.happy += 10
+        cprint(f'{self.name} - гладила кота', color='magenta')
+
+class Cat(Family):
+
+    def __init__(self, name):
+        super().__init__(name=name)
+
+    def __str__(self):
+        return super().__str__()
+
+    def in_house(self, house):
+        self.house = house
+
+    def act(self):
+
+        count = randint(1, 2)
+
+        if self.fullness <= 0:
+            cprint(f'{self.name} - умер от недостатка еды((', color='red')
+            return
+
+        if self.fullness <= 20:
+            self.eat()
+        elif count == 1:
+            self.sleep()
+        elif count == 2:
+            self.soil()
+
+    def eat(self):
+        if self.house.food_cat < 0:
+            cprint(f'{self.name} - нету еды', color='red')
+            self.fullness = 0
+        else:
+            count = randint(1, 10)
+            self.house.food_cat -= count
+            self.fullness += count * 2
+            cprint(f'{self.name} - поел {count} едениц еды', color='green')
+
+    def sleep(self):
+        self.fullness -= 10
+        cprint(f'{self.name} - спал', color='yellow')
+
+    def soil(self):
+        self.fullness -= 10
+        self.house.dirt += 5
+        cprint(f'{self.name} - драл обои', color='blue')
+
+
 
 home = House()
 serge = Husband(name='Сережа')
 masha = Wife(name='Маша')
+murchik = Cat(name='Мурчик')
 
 members = [
     serge,
     masha,
+    murchik,
 ]
 
 for member in members:
