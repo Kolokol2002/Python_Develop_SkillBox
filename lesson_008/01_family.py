@@ -72,7 +72,7 @@ class Family:
         self.house = None
 
     def __str__(self):
-        return f'У {self.__class__.__name__}, сытость - {self.fullness}, счастья - {self.happy}'
+        return f'У {self.name}, сытость - {self.fullness}, счастья - {self.happy}'
 
     def in_house(self, house):
         self.house = house
@@ -199,14 +199,48 @@ class Wife(Family):
             self.house.dirt -= self.house.dirt
         cprint(f'{self.name} - убралась в доме', color='red')
 
+class Child(Family):
+
+    def __init__(self, name):
+        super().__init__(name=name)
+
+    def __str__(self):
+        return super().__str__()
+
+    def act(self):
+
+        count = randint(1, 2)
+
+        if self.fullness < 0:
+            cprint(f'{self.name} - умер от недостатка еды((', color='red')
+            return
+
+        if self.fullness <= 10:
+            self.eat()
+        elif count == 1:
+            self.sleep()
+
+    def eat(self):
+        count = randint(1, 10)
+        self.house.food -= count
+        self.fullness += count
+        self.house.count_food += count
+        cprint(f'{self.name} - поел {count} едениц еды', color='green')
+
+    def sleep(self):
+        self.fullness -= 10
+        cprint(f'{self.name} - спал', color='green')
+
 
 home = House()
 serge = Husband(name='Сережа')
 masha = Wife(name='Маша')
+vaska = Child(name='Васька')
 
 members = [
     serge,
     masha,
+    vaska,
 ]
 
 for member in members:
