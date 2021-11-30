@@ -52,6 +52,7 @@ class House:
         self.money = 100
         self.food = 50
         self.dirt = 0
+        self.food_cat = 30
 
     def __str__(self):
         self.count += 1
@@ -65,8 +66,7 @@ class House:
 
 class Family:
 
-    def __init__(self, name):
-        self.name = f'{self.__class__.__name__} {name}'
+    def __init__(self):
         self.fullness = 30
         self.happy = 100
         self.house = None
@@ -84,7 +84,9 @@ class Family:
 class Husband(Family):
 
     def __init__(self, name):
-        super().__init__(name=name)
+        super().__init__()
+        self.name = f'{self.__class__.__name__} {name}'
+        self.salary = 150
 
     def __str__(self):
         return super().__str__()
@@ -140,11 +142,12 @@ class Husband(Family):
         self.happy += 10
         cprint(f'{self.name} - гладил кота', color='magenta')
 
-
 class Wife(Family):
 
     def __init__(self, name):
-        super().__init__(name=name)
+        super().__init__()
+        self.name = f'{self.__class__.__name__} {name}'
+
 
     def __str__(self):
         return super().__str__()
@@ -222,7 +225,9 @@ class Wife(Family):
 class Cat(Family):
 
     def __init__(self, name):
-        super().__init__(name=name)
+        super().__init__()
+        self.name = f'{self.__class__.__name__} {name}'
+
 
     def __str__(self):
         return super().__str__()
@@ -264,11 +269,12 @@ class Cat(Family):
         self.house.dirt += 5
         cprint(f'{self.name} - драл обои', color='blue')
 
-
 class Child(Family):
 
     def __init__(self, name):
-        super().__init__(name=name)
+        super().__init__()
+        self.name = f'{self.__class__.__name__} {name}'
+
 
     def __str__(self):
         return super().__str__()
@@ -297,31 +303,53 @@ class Child(Family):
         self.fullness -= 10
         cprint(f'{self.name} - спал', color='green')
 
+class Simulation(Family):
 
-home = House()
-serge = Husband(name='Сережа')
-masha = Wife(name='Маша')
-vaska = Child(name='Васька')
-murchik = Cat(name='Мурчик')
+    def __init__(self, money_incidents, food_incidents):
+        super().__init__()
+        self.house = House()
+        self.money_incidents = money_incidents
+        self.food_incidents = food_incidents
 
-members = [
-    serge,
-    masha,
-    murchik,
-    vaska,
-]
 
-for member in members:
-    member.in_house(house=home)
+    def experiment(self, salary):
+        self.salary = salary
+        self.house.money -= self.house.money/2
+        self.house.food -= self.house.food/2
+        home = House()
+        serge = Husband(name='Сережа')
+        masha = Wife(name='Маша')
+        vaska = Child(name='Васька')
+        murchik = Cat(name='Мурчик')
 
-for day in range(365):
-    cprint('================== День {} =================='.format(day), color='red')
-    for member in members:
-        member.act()
-    for member in members:
-        cprint(member, color='cyan')
+        members = [
+            serge,
+            masha,
+            murchik,
+            vaska,
+        ]
 
-    cprint(home, color='cyan')
+        for member in members:
+            member.in_house(house=home)
+
+        for day in range(365):
+            cprint('================== День {} =================='.format(day), color='red')
+            for member in members:
+                member.act()
+            for member in members:
+                cprint(member, color='cyan')
+
+            cprint(home, color='cyan')
+
+
+
+
+for food_incidents in range(6):
+  for money_incidents in range(6):
+      life = Simulation(money_incidents, food_incidents)
+      for salary in range(50, 401, 50):
+          max_cats = life.experiment(salary)
+          print(f'При зарплате {salary} максимально можно прокормить {max_cats} котов')
 
 
 ######################################################## Часть вторая
