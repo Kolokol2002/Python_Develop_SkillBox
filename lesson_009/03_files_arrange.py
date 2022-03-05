@@ -34,7 +34,19 @@ import os, time, shutil
 # Чтение документации/гугла по функциям - приветствуется. Как и поиск альтернативных вариантов :)
 # Требования к коду: он должен быть готовым к расширению функциональности. Делать сразу на классах.
 
-# TODO здесь ваш код
+
+statr_dir = 'icons'
+list_dir = os.listdir(statr_dir)
+
+
+for items in list_dir:
+    walk = os.walk(items)
+    list_items = os.listdir(f'{statr_dir}/{items}')
+    for i in list_items:
+        time_items = time.gmtime(os.path.getmtime(f'{statr_dir}/{items}/{i}'))[:2]
+        os.makedirs(f'icons_by_year/{time_items[0]}/{time_items[1]}', exist_ok=True)
+        shutil.copy2(f'{statr_dir}/{items}/{str(i)}', f'icons_by_year/{time_items[0]}/{time_items[1]}')
+
 
 # Усложненное задание (делать по желанию)
 # Нужно обрабатывать zip-файл, содержащий фотографии, без предварительного извлечения файлов в папку.
