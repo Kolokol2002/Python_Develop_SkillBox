@@ -23,3 +23,34 @@
 # Вызов метода обернуть в try-except.
 
 # TODO здесь ваш код
+
+class NotNameError(Exception):
+    pass
+
+
+class NotEmailError(Exception):
+    pass
+
+
+with open('registrations.txt', 'r', encoding='utf8') as text:
+    for i in text:
+        text_split = i.split(' ')
+        try:
+            if len(text_split) != 3:
+                raise ValueError('НЕ присутсвуют все три поля')
+            elif text_split[0].isalpha() is not True:
+                raise NotNameError('поле имени содержит НЕ только буквы')
+            elif '@' not in list(text_split[1]):
+                raise NotEmailError('поле емейл НЕ содержит @ и .(точку)')
+            elif 10 < int(text_split[2]) > 99:
+                raise ValueError('поле возраст НЕ является числом от 10 до 99')
+            with open('registrations_good.log', 'a', encoding='utf8') as text:
+                for j in text_split:
+                    text.write(f'{j} ')
+
+        except Exception as exc:
+            with open('registrations_bad.log', 'a', encoding='utf8') as text:
+                for j in text_split:
+                    text.write(f'{j} ')
+                text.write(f'Error - {exc.args}\n')
+            continue
