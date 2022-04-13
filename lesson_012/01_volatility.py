@@ -65,20 +65,28 @@
 #
 # Для плавного перехода к мультипоточности, код оформить в обьектном стиле, используя следующий каркас
 #
+
+# class <Название класса>:
+#
+#     def __init__(self, <параметры>):
+#         <сохранение параметров>
+#
+#     def run(self):
+#         <обработка данных>
+
 import os
 from collections import defaultdict
-from threading import Thread, Lock
+import time
 
+start_time = time.time()
+class Valatition():
 
-class Valatition(Thread):
-
-    def __init__(self, file, lock, defaultlist):
+    def __init__(self, file, defaultdict):
         super().__init__()
         self.file = file
-        self.all_info = defaultlist
+        self.all_info = defaultdict
         self.price = []
         self.name_ticket = None
-        self.lock = lock
 
     def run(self):
         one_str = True
@@ -91,26 +99,21 @@ class Valatition(Thread):
                 self.price.append(float(res[2]))
                 if self.name_ticket == None:
                     self.name_ticket = res[0]
-        # print(self.price)
         average_price = (max(self.price) + min(self.price)) / 2
         volatility = ((max(self.price) - min(self.price)) / average_price) * 100
-        with self.lock:
-              self.all_info[self.name_ticket] += volatility
+        self.all_info[self.name_ticket] += volatility
         self.price = []
 
 
 start_dir = 'trades'
 list_dir = os.listdir(start_dir)
 all_info = defaultdict(int)
-lock = Lock()
 
-validation = [Valatition(file=f'{start_dir}/{dir}', lock=lock, defaultlist=all_info) for dir in list_dir]
-
-for val in validation:
-    val.start()
+validation = [Valatition(file=f'{start_dir}/{dir}', defaultdict=all_info) for dir in list_dir]
 
 for val in validation:
-    val.join()
+    val.run()
+
 
 null_validation = []
 for tiket, value in list(all_info.items()):
@@ -131,5 +134,9 @@ print(''.join(reversed([f'{tiket} - {value} %\n' for tiket, value in list_key[:3
 print('Нулевая волатильность:')
 print(', '.join([tiket for tiket in null_validation]))
 
+end_time = time.time()
 
+res_time = round(end_time - start_time, 1)
+
+print(res_time)
 
