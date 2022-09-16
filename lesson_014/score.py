@@ -35,3 +35,24 @@
 # И, возможно, вам пригодится паттерн проектирования "Состояние",
 #   см https://clck.ru/Fudd8 и https://refactoring.guru/ru/design-patterns/state
 
+from bowling import bowling_count
+
+def get_score(game_result):
+    result_score = 0
+    before_result = None
+    for result in game_result:
+        if result == 'X':
+            result_score += 10
+        elif result == '-':
+            result_score += 0
+        elif result == '/':
+            result_score += (10 - int(before_result))
+        else:
+            result_score += int(result)
+        before_result = result
+
+    return result_score
+
+
+# print(f'За гру із 10 фреймів вийшло - {get_score(bowling_count())} бал')
+
