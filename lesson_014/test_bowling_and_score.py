@@ -10,12 +10,12 @@ class MyScoreTest(unittest.TestCase):
 
     def test_x(self):
         result = get_score(["X"])
-        self.assertEqual(result, 10)
+        self.assertEqual(result, 20)
 
     def test_slesh(self):
         list_test = ["4", "/"]
         result = get_score(list_test) - int(list_test[0])
-        self.assertEqual(result, 6)
+        self.assertEqual(result, 16)
 
     def test_null(self):
         result = get_score(["-"])
@@ -28,7 +28,7 @@ class MyScoreTest(unittest.TestCase):
 class MyBowlingTest(unittest.TestCase):
 
     def test_x(self):
-        result = bowling_count(round=1, balls=10)
+        result = bowling_count(round=1, balls=20)
         self.assertEqual(result, ['X'])
 
     def test_slesh(self):

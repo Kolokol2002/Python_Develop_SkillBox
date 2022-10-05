@@ -43,10 +43,10 @@ def make_ticket(fio, from_, to, date, save_to):
 
 parser = argparse.ArgumentParser(description='Ping script')
 
-parser.add_argument('--fio', dest='fio', type=str)
-parser.add_argument('--from', dest='from_', type=str)
-parser.add_argument('--to', dest='to', type=str)
-parser.add_argument('--date', dest='date', type=str)
+parser.add_argument('--fio', dest='fio', type=str, required=True)
+parser.add_argument('--from', dest='from_', type=str, required=True)
+parser.add_argument('--to', dest='to', type=str, required=True)
+parser.add_argument('--date', dest='date', type=str, required=True)
 parser.add_argument('--save_to', dest='save_to', type=str)
 
 args = parser.parse_args()

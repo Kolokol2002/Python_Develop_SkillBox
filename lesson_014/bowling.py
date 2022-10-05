@@ -4,7 +4,7 @@ from random import randint
 def bowling_count(round=10, balls=None):
     result = []
     for _ in range(round):
-        random_number = 10
+        random_number = 20
         for throw in range(2):
             if balls == None:
                 balls = randint(0, random_number)
@@ -14,7 +14,7 @@ def bowling_count(round=10, balls=None):
                 if balls == random_number:
                     result.append('/')
                     break
-            if balls == 10:
+            if balls == 20:
                 result.append('X')
                 break
             elif balls == 0:
@@ -22,7 +22,7 @@ def bowling_count(round=10, balls=None):
             else:
                 result.append(str(balls))
             if balls != None and balls != 3:
-                balls = 10 - balls
+                balls = 20 - balls
     return result
 
 

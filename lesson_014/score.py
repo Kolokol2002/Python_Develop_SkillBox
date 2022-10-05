@@ -34,6 +34,7 @@
 # При написании кода помнить, что заказчик может захотеть доработок и новых возможностей...
 # И, возможно, вам пригодится паттерн проектирования "Состояние",
 #   см https://clck.ru/Fudd8 и https://refactoring.guru/ru/design-patterns/state
+import argparse
 
 from bowling import bowling_count
 
@@ -42,11 +43,11 @@ def get_score(game_result):
     before_result = None
     for result in game_result:
         if result == 'X':
-            result_score += 10
+            result_score += 20
         elif result == '-':
             result_score += 0
         elif result == '/':
-            result_score += (10 - int(before_result))
+            result_score += (20 - int(before_result))
         else:
             result_score += int(result)
         before_result = result
@@ -54,5 +55,12 @@ def get_score(game_result):
     return result_score
 
 
-# print(f'За гру із 10 фреймів вийшло - {get_score(bowling_count())} бал')
+print(f'За гру із 10 фреймів вийшло - {get_score(bowling_count())} бал')
+# console = argparse.ArgumentParser(description='Bowling Game')
+#
+# console.add_argument('--result', dest='result', type=list)
+#
+# args = console.parse_args()
+#
+# print(f"{args.result} - {get_score(args.result)}")
 
